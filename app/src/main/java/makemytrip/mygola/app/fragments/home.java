@@ -9,9 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.colintmiller.simplenosql.NoSQL;
+import com.colintmiller.simplenosql.NoSQLEntity;
+import com.colintmiller.simplenosql.RetrievalCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +25,17 @@ import java.util.List;
 
 import info.hoang8f.widget.FButton;
 import makemytrip.mygola.app.R;
+import makemytrip.mygola.app.adapters.ActivityAdapter;
+import makemytrip.mygola.app.models.APIHitsModel;
+import makemytrip.mygola.app.models.ActivitesListModel;
+import makemytrip.mygola.app.models.ActivityModel;
+import makemytrip.mygola.app.rest.MygolaService;
+import makemytrip.mygola.app.util.ApiUtils;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * Created by Aradh Pillai on 1/10/15.
@@ -26,20 +43,32 @@ import makemytrip.mygola.app.R;
 /*
 * this fragment is using for chat tab option
 * */
-public class home extends Fragment {
+public class home extends Fragment implements RetrievalCallback<ActivityModel>,
+		Callback<ActivitesListModel>
+{
 
     private String TAG = getClass().getSimpleName();
 
-	private Context context = getActivity();
+	private Context context;
 
+	private String bucket="mygola";
+	private int entityId;
 	private Spinner citySelectSpinner, sortSelectSpinner;
 	private RecyclerView activityRecyclerView;
+	private Retrofit retrofit;
+	private int pageNumber = 0;
+	private ProgressBar progressBar;
+	ActivityAdapter activityAdapter;
+	private ActivitesListModel activitiyList;
 	private List<String> cities = Arrays.asList("Delhi", "Bangalore", "Mumbai");
 	private List<String> sort_options = Arrays.asList("Price", "Name", "Rating");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+	    context = getActivity();
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
 
 /*
 		FButton fButton = (FButton)view.findViewById(R.id.openfav);
@@ -61,12 +90,137 @@ public class home extends Fragment {
 	{
 		super.onViewCreated(view, savedInstanceState);
 
+		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+		progressBar.setVisibility(View.VISIBLE);
+
+		activityRecyclerView = (RecyclerView) view.findViewById(R.id.activityListRecyclerView);
+//		activityRecyclerView.setVisibility(View.GONE);
+
+
+		retrofit = new Retrofit.Builder()
+				.baseUrl(ApiUtils.getApiBaseUrl())
+				.addConverterFactory(GsonConverterFactory.create())
+				.build();
+
 		citySelectSpinner = (Spinner) view.findViewById(R.id.citySelectSpinner);
 		sortSelectSpinner = (Spinner) view.findViewById(R.id.sortDelectSpinner);
+
+		citySelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+		{
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				/*ActivitesListModel tmp = activitiyList;
+				activitiyList.getActivities().clear();
+				for (ActivityModel activity : tmp.getActivities())
+				{
+					if (activity.getCity().equals(cities.get(position)))
+						activitiyList.getActivities().add(activity);
+				}
+				setUpAdapter();*/
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+
+			}
+		});
+
+		loadActivities();
+
+		setUpAdapter();
 /*
 		citySelectSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.spinner_item,
 				cities));
 		sortSelectSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.spinner_item,
 				sort_options));*/
 	}
+
+	private void loadActivities()
+	{
+		MygolaService mygolaService = retrofit.create(MygolaService.class);
+
+		Call<ActivitesListModel> activitiesCall = mygolaService.getActivitiesList("list_activity");
+		Call<APIHitsModel> apiHitsModelCall = mygolaService.getApiHits("api_hits");
+
+		activitiesCall.enqueue(this);
+	}
+
+	private void setUpAdapter()
+	{
+
+		//TODO - create adapter and assign it to the recyclerview.
+
+		activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
+		activityRecyclerView.setAdapter(activityAdapter);
+
+		progressBar.setVisibility(View.GONE);
+		activityRecyclerView.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void retrievedResults(List<NoSQLEntity<ActivityModel>> noSQLEntities)
+	{
+		Log.d(TAG, "retrievedResults");
+		try
+		{
+			activitiyList.getActivities().clear();
+			for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
+			{
+				activitiyList.getActivities().add(activity.getData());
+			}
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+		}
+		finally
+		{
+			activityAdapter.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onResponse(Response<ActivitesListModel> response, Retrofit retrofit)
+	{
+		Log.d(TAG, "onResponse. URL: ");
+		if (response.isSuccess())
+		{
+			Log.d(TAG, "isSuccess");
+			activitiyList = response.body();
+
+			int ActivityId=0;
+			NoSQLEntity<ActivityModel> noSQLEntity = null;
+			for (ActivityModel activity : activitiyList.getActivities())
+			{
+
+				noSQLEntity = new NoSQLEntity<>(bucket, "" + ActivityId);
+				noSQLEntity.setData(activity);
+
+			}
+			NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
+		}
+		else
+		{
+			Log.e(TAG, response.message());
+		}
+
+		NoSQL.with(context).using(ActivityModel.class)
+				.bucketId(bucket)
+				.retrieve(this);
+
+	}
+
+	@Override
+	public void onFailure(Throwable t)
+	{
+		Log.e(TAG, "onFailure: Activities list fetching failed: " + t.getMessage());
+
+		NoSQL.with(context).using(ActivityModel.class)
+				.bucketId(bucket)
+				.retrieve(this);
+
+	}
+
 }

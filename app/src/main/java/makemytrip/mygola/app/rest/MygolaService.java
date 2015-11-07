@@ -12,9 +12,9 @@ import retrofit.http.Query;
 public interface MygolaService
 {
 
-	@GET("/mygola?type=json")
+	@GET("mygola?type=json")
 	Call<ActivitesListModel> getActivitiesList(@Query("query") String query);
 
-	@GET("/mygola?type=json")
+	@GET("mygola?type=json")
 	Call<APIHitsModel> getApiHits(@Query("query") String query);
 }

@@ -156,6 +156,13 @@
 			android:layout_below="@+id/selectorsLayout"
 			android:layout_alignParentStart="true"/>
 
+		<ProgressBar
+			android:id="@+id/progressBar"
+			android:indeterminate="true"
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
 
 	<LinearLayout
 		android:id="@+id/bottomLayout"

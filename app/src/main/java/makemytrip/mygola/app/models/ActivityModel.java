@@ -1,5 +1,7 @@
 package makemytrip.mygola.app.models;
 
+import android.util.Log;
+
 /**
  * Created by deves on 11/7/2015.
  */
@@ -8,7 +10,7 @@ public class ActivityModel {
 	private String name;
 	private String image;
 	private int actual_price;
-	private int discount;
+//	private int discount;
 	private double rating;
 	private String city;
 	private String location;
@@ -73,19 +75,21 @@ public class ActivityModel {
 	 * @return
 	 * The discount
 	 */
-	public int getDiscount() {
-		return discount;
-	}
+//	public int getDiscount() {
+//		return discount;
+//	}
 
 	/**
 	 *
 	 * @param discount
 	 * The discount
 	 */
-	public void setDiscount(String discount) {
-		discount = discount.substring(0, discount.length()-2);
-		this.discount = Integer.parseInt(discount);
-	}
+//	public void setDiscount(String discount) {
+//		Log.d("setDiscount", "Discount: " + discount);
+//		discount = discount.substring(0, discount.length()-2);
+//		Log.d("setDiscount", "Discount: " + discount);
+//		this.discount = Integer.parseInt(discount);
+//	}
 
 	/**
 	 *

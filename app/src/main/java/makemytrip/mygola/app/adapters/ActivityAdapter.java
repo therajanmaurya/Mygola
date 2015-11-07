@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import makemytrip.mygola.app.R;
+import makemytrip.mygola.app.models.ActivityModel;
 
 /**
  * Created by rajanmaurya
@@ -29,7 +30,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
 	private final String LOG_TAG = getClass().getSimpleName();
 
-	List<String> Posts; // change list after fetch data
+	List<ActivityModel> activityModelList; // change list after fetch data
 	Context context;
 	private final int VIEW_ITEM = 1;
 	private final int VIEW_PROG = 0;
@@ -72,8 +73,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 	}
 
 
-	public ActivityAdapter(Context activity) {
+	public ActivityAdapter(Context activity, List<ActivityModel> activityModelList) {
 		this.context = activity;
+		this.activityModelList = activityModelList;
 
 		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.color.white)
@@ -91,7 +93,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
 	@Override
 	public int getItemCount() {
-		return 10;
+		return activityModelList.size();
 	}
 
 	@Override
@@ -118,9 +120,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
 			try
 			{
-				viewHolder.getName().setText("set name of activity");
-				String price  = "₹ " + "set Ruppes in list" ;
-				viewHolder.getActual_price().setText(price);
+				viewHolder.getName().setText(activityModelList.get(position).getName());
+				viewHolder.getActual_price().setText("₹ " + activityModelList.get(position).getActual_price());
 			}catch(NullPointerException e){
 				Log.i(LOG_TAG, "Exception Occured: " + e.getMessage());
 			}
@@ -144,4 +145,5 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 			}
 		}
 	}
+
 }

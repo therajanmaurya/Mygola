@@ -5,8 +5,8 @@ package makemytrip.mygola.app.util;
  */
 public class ApiUtils
 {
-	public String getApiBaseUrl()
+	public static String getApiBaseUrl()
 	{
-		return "http://mygola.0x10.info/api";
+		return "http://mygola.0x10.info/api/";
 	}
 }
