@@ -1,12 +1,19 @@
 package makemytrip.mygola.app.fragments;// Created by Sanat Dutta on 2/17/2015.
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import info.hoang8f.widget.FButton;
 import makemytrip.mygola.app.R;
@@ -20,6 +27,12 @@ import makemytrip.mygola.app.R;
 public class home extends Fragment {
 
     private String TAG = getClass().getSimpleName();
+
+	private Context context = getActivity();
+
+	AppCompatSpinner citySelectSpinner, sortSelectSpinner;
+	private List<String> cities = Arrays.asList("Delhi", "Bangalore", "Mumbai");
+	private List<String> sort_options = Arrays.asList("Price", "Name", "Rating");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,4 +52,18 @@ public class home extends Fragment {
 
         return view;
     }
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+
+		citySelectSpinner = (AppCompatSpinner) view.findViewById(R.id.citySelectSpinner);
+		sortSelectSpinner = (AppCompatSpinner) view.findViewById(R.id.sortDelectSpinner);
+/*
+		citySelectSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.spinner_item,
+				cities));
+		sortSelectSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.spinner_item,
+				sort_options));*/
+	}
 }

@@ -17,4 +17,15 @@
     <string name="tab2">Discover</string>
     <string name="tab3">Chat</string>
 
+	<string-array name="cities">
+		<item>Delhi</item>
+		<item>Bangalore</item>
+		<item>Mumbai</item>
+	</string-array>
+
+	<string-array name="sort_options">
+		<item>Price</item>
+		<item>Name</item>
+		<item>Rating</item>
+	</string-array>
 </resources>

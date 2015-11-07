@@ -116,4 +116,28 @@
     </RadioGroup>-->
 
 
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal">
+
+		<AppCompatSpinner
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:id="@+id/citySelectSpinner"
+			android:spinnerMode="dropdown"
+			android:entries="@array/cities"
+			android:contentDescription="Filter by city:"/>
+
+		<AppCompatSpinner
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:spinnerMode="dropdown"
+			android:entries="@array/sort_options"
+			android:contentDescription="Sort by:"
+			android:id="@+id/sortDelectSpinner"/>
+
+	</LinearLayout>
 </RelativeLayout>
