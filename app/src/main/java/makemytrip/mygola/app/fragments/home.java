@@ -59,7 +59,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 	private int pageNumber = 0;
 	private ProgressBar progressBar;
 	ActivityAdapter activityAdapter;
-	private ActivitesListModel activitiyList;
+	private ActivitesListModel activitiyList = new ActivitesListModel();
 	private List<String> cities = Arrays.asList("Delhi", "Bangalore", "Mumbai");
 	private List<String> sort_options = Arrays.asList("Price", "Name", "Rating");
 
@@ -142,7 +142,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 		MygolaService mygolaService = retrofit.create(MygolaService.class);
 
 		Call<ActivitesListModel> activitiesCall = mygolaService.getActivitiesList("list_activity");
-		Call<APIHitsModel> apiHitsModelCall = mygolaService.getApiHits("api_hits");
+//		Call<APIHitsModel> apiHitsModelCall = mygolaService.getApiHits("api_hits");
 
 		activitiesCall.enqueue(this);
 	}
@@ -197,9 +197,9 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 
 				noSQLEntity = new NoSQLEntity<>(bucket, "" + ActivityId);
 				noSQLEntity.setData(activity);
-
+				NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
 			}
-			NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
+
 		}
 		else
 		{
