@@ -33,4 +33,10 @@
     //for pre-lollipop gradient color
     <color name="pre_lollipop_shadow_color">#40000000</color>
 
+    <color name="app_body_text_1">#de000000</color>
+    <color name="app_body_text_2">#8a000000</color>
+    <color name="divider">#1f000000</color>
+    <color name="theme_accent_1">#00b0ff</color>
+    <color name="card">#fff</color>
+
 </resources>

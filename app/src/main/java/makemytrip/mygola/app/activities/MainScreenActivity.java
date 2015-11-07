@@ -17,8 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import makemytrip.mygola.app.R;
-import makemytrip.mygola.app.fragments.Chat;
-import makemytrip.mygola.app.fragments.Discover;
+import makemytrip.mygola.app.fragments.home;
 import makemytrip.mygola.app.tabbarview.TabBarView;
 import makemytrip.mygola.app.util.CustomViewPager;
 
@@ -185,11 +184,11 @@ public class MainScreenActivity extends AppCompatActivity {
         public Fragment getItem(int pos) {
             switch (pos) {
                 case 0:
-                    return new Discover();
+                    return new home();
                 case 1:
-                    return new Discover();
+                    return new home();
                 case 2:
-                    return new Chat();
+                    return new home();
                 default:
                     return null;
             }
