@@ -19,6 +19,7 @@ import android.view.View;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import makemytrip.mygola.app.R;
+import makemytrip.mygola.app.fragments.Discover;
 import makemytrip.mygola.app.fragments.home;
 import makemytrip.mygola.app.tabbarview.TabBarView;
 import makemytrip.mygola.app.util.CustomViewPager;
@@ -210,9 +211,9 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
                 case 0:
                     return new home();
                 case 1:
-                    return new home();
+                    return new Discover();
                 case 2:
-                    return new home();
+                    return new Discover();
                 default:
                     return null;
             }

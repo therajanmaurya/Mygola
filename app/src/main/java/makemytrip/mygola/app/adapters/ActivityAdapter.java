@@ -58,7 +58,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
 		}
 
-		public ImageView getCoverpost() {
+		public ImageView getImage() {
 			return image;
 		}
 
@@ -111,7 +111,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
 			try
 			{
-				ImageLoader.getInstance().displayImage(drawableimage, viewHolder.image, options, animateFirstListener);
+				ImageLoader.getInstance().displayImage(activityModelList.get(position).getImage(), viewHolder.image, options, animateFirstListener);
 			}catch (Exception e)
 			{
 				Log.i(LOG_TAG, "Exception Occured: " + e.getMessage());

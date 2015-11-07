@@ -3,7 +3,6 @@ package makemytrip.mygola.app.fragments;// Created by Sanat Dutta on 2/17/2015.
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,23 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.colintmiller.simplenosql.NoSQL;
 import com.colintmiller.simplenosql.NoSQLEntity;
 import com.colintmiller.simplenosql.RetrievalCallback;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import info.hoang8f.widget.FButton;
 import makemytrip.mygola.app.R;
 import makemytrip.mygola.app.adapters.ActivityAdapter;
-import makemytrip.mygola.app.models.APIHitsModel;
 import makemytrip.mygola.app.models.ActivitesListModel;
 import makemytrip.mygola.app.models.ActivityModel;
 import makemytrip.mygola.app.rest.MygolaService;
@@ -95,6 +89,10 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 		progressBar.setVisibility(View.VISIBLE);
 
 		activityRecyclerView = (RecyclerView) view.findViewById(R.id.activityListRecyclerView);
+		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		activityRecyclerView.setLayoutManager(layoutManager);
+		activityRecyclerView.setHasFixedSize(true);
 //		activityRecyclerView.setVisibility(View.GONE);
 
 
@@ -153,11 +151,12 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 
 		//TODO - create adapter and assign it to the recyclerview.
 
-		activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
-		activityRecyclerView.setAdapter(activityAdapter);
-		activityRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+
+		//activityRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 		progressBar.setVisibility(View.GONE);
 		activityRecyclerView.setVisibility(View.VISIBLE);
+
 	}
 
 	@Override
@@ -201,6 +200,8 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 				NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
 			}
 
+			activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
+			activityRecyclerView.setAdapter(activityAdapter);
 		}
 		else
 		{
