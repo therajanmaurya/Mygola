@@ -7,6 +7,18 @@ import android.util.Log;
  */
 public class ActivityModel {
 
+	private int Id;
+
+	public int getId()
+	{
+		return Id;
+	}
+
+	public void setId(int id)
+	{
+		Id = id;
+	}
+
 	private String name;
 	private String image;
 	private int actual_price;
@@ -15,6 +27,17 @@ public class ActivityModel {
 	private String city;
 	private String location;
 	private String description;
+	private boolean favorite = false;
+
+	public boolean isFavorite()
+	{
+		return favorite;
+	}
+
+	public void setFavorite(boolean favorite)
+	{
+		this.favorite = favorite;
+	}
 
 	/**
 	 *

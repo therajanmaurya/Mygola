@@ -9,5 +9,8 @@
     <dimen name="spacing_normal">8dp</dimen>
     <dimen name="cardMarginHorizontal">10dp</dimen>
     <dimen name="cardMarginVertical">8dp</dimen>
+	<dimen name="profile_image_icon_width">100dp</dimen>
+	<dimen name="profile_image_icon_height">100dp</dimen>
+	<dimen name="access_button_padding_all">10dp</dimen>
 
 </resources>

@@ -18,9 +18,14 @@
     <string name="tab3">Chat</string>
 
 	<string-array name="cities">
+		<item>No filter</item>
 		<item>Delhi</item>
 		<item>Bangalore</item>
 		<item>Mumbai</item>
+		<item>Chennai</item>
+		<item>Kolkata</item>
+		<item>Ahmedabad</item>
+		<item>Goa</item>
 	</string-array>
 
 	<string-array name="sort_options">

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="profile_image_icon_width">100dp</dimen>
+	<dimen name="profile_image_icon_height">100dp</dimen>
+	<dimen name="access_button_padding_all">10dp</dimen>
+</resources>

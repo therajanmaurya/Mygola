@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -45,7 +46,18 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 		private final ImageView image;
 		private final TextView name;
 		private final TextView actual_price;
+		private final Switch favoriteToggle = null;
+		private int id;
 
+		public int getId()
+		{
+			return id;
+		}
+
+		public void setId(int id)
+		{
+			this.id = id;
+		}
 
 		public ViewHolder(View v) {
 			super(v);
@@ -54,7 +66,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 			image = (ImageView) v.findViewById(R.id.image);
 			name  = (TextView) v.findViewById(R.id.name);
 			actual_price  = (TextView) v.findViewById(R.id.actual_price);
-
+//			favoriteToggle = (Switch) v.findViewById(R.id.favoriteToggle);
 
 		}
 
@@ -68,6 +80,11 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
 		public TextView getActual_price(){
 			return actual_price;
+		}
+
+		public Switch getFavoriteToggle()
+		{
+			return favoriteToggle;
 		}
 
 	}
@@ -125,6 +142,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 			}catch(NullPointerException e){
 				Log.i(LOG_TAG, "Exception Occured: " + e.getMessage());
 			}
+
+		viewHolder.setId(activityModelList.get(position).getId());
+//		viewHolder.getFavoriteToggle().setChecked(activityModelList.get(position).isFavorite());
 
 	}
 

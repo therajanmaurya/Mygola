@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.colintmiller.simplenosql.DataComparator;
+import com.colintmiller.simplenosql.DataFilter;
 import com.colintmiller.simplenosql.NoSQL;
 import com.colintmiller.simplenosql.NoSQLEntity;
 import com.colintmiller.simplenosql.RetrievalCallback;
@@ -55,8 +57,8 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 	private ProgressBar progressBar;
 	ActivityAdapter activityAdapter;
 	private ActivitesListModel activitiyList = new ActivitesListModel();
-	private List<String> cities = Arrays.asList("Delhi", "Bangalore", "Mumbai");
-	private List<String> sort_options = Arrays.asList("Price", "Name", "Rating");
+	private List<String> cities;
+	private List<String> sort_options;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,6 +103,8 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 				.addConverterFactory(GsonConverterFactory.create())
 				.build();
 
+		cities = Arrays.asList(context.getResources().getStringArray(R.array.cities));
+		sort_options = Arrays.asList(context.getResources().getStringArray(R.array.sort_options));
 		citySelectSpinner = (Spinner) view.findViewById(R.id.citySelectSpinner);
 		sortSelectSpinner = (Spinner) view.findViewById(R.id.sortDelectSpinner);
 
@@ -109,14 +113,22 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
-				/*ActivitesListModel tmp = activitiyList;
-				activitiyList.getActivities().clear();
-				for (ActivityModel activity : tmp.getActivities())
-				{
-					if (activity.getCity().equals(cities.get(position)))
-						activitiyList.getActivities().add(activity);
-				}
-				setUpAdapter();*/
+				loadActivities();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+				loadActivities();
+			}
+		});
+
+		sortSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+		{
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				loadActivities();
 			}
 
 			@Override
@@ -157,6 +169,79 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 
 	}
 
+	private void loadFromDatabase()
+	{
+		NoSQL.with(context).using(ActivityModel.class)
+				.bucketId(bucket)
+				.filter(new DataFilter<ActivityModel>()
+				{
+					@Override
+					public boolean isIncluded(NoSQLEntity<ActivityModel> item)
+					{
+						Log.d(TAG, "isIncluded");
+						if (item != null && item.getData() != null && citySelectSpinner
+								.getSelectedItemPosition()!=0)
+						{
+							return item.getData().getCity().equals(cities.get(citySelectSpinner
+									.getSelectedItemPosition()));
+						}
+						return true;
+					}
+				})
+				.orderBy(new DataComparator<ActivityModel>()
+				{
+					@Override
+					public int compare(NoSQLEntity<ActivityModel> lhs, NoSQLEntity<ActivityModel> rhs)
+					{
+						Log.d(TAG, "compare(): ");
+						if (lhs != null && lhs.getData() != null) {
+							if (rhs != null && rhs.getData() != null) {
+								switch (sortSelectSpinner.getSelectedItemPosition())
+								{
+									case 0:
+										Log.d(TAG, "case 0, Price: " + lhs.getData()
+												.getActual_price() + " v/s " + rhs.getData()
+												.getActual_price());
+										return lhs
+												.getData()
+												.getActual_price() >
+												rhs
+												.getData()
+												.getActual_price() ? 1 : -1;
+
+									case 1:
+										Log.d(TAG, "case 1, Name: " + lhs.getData()
+												.getName() + " v/s " + rhs.getData()
+												.getName());
+										return lhs.getData().getName().compareToIgnoreCase(rhs.getData().getName
+												());
+
+									case 2:
+										Log.d(TAG, "case 2, Rating: " + lhs.getData()
+												.getRating() + " v/s " + rhs.getData()
+												.getRating());
+										return lhs
+												.getData()
+												.getRating() >
+												rhs
+												.getData()
+												.getRating() ? 1 : -1;
+
+									default:
+										return -1;
+								}
+							} else {
+								return 1;
+							}
+						} else if (rhs != null && rhs.getData() != null) {
+							return -1;
+						} else {
+							return 0;
+						}
+					}
+				})
+				.retrieve(this);
+	}
 	@Override
 	public void retrievedResults(List<NoSQLEntity<ActivityModel>> noSQLEntities)
 	{
@@ -167,6 +252,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 			for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
 			{
 				Log.d(TAG, "Activity retrieved from database: " + activity.getData().getName());
+				activity.getData().setId(Integer.parseInt(activity.getId()));
 				activitiyList.getActivities().add(activity.getData());
 			}
 		}
@@ -208,9 +294,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 			Log.e(TAG, response.message());
 		}
 
-		NoSQL.with(context).using(ActivityModel.class)
-				.bucketId(bucket)
-				.retrieve(this);
+		loadFromDatabase();
 
 	}
 
@@ -219,9 +303,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 	{
 		Log.e(TAG, "onFailure: Activities list fetching failed: " + t.getMessage());
 
-		NoSQL.with(context).using(ActivityModel.class)
-				.bucketId(bucket)
-				.retrieve(this);
+		loadFromDatabase();
 
 	}
 
