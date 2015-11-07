@@ -154,8 +154,6 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 
 
 		//activityRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-		progressBar.setVisibility(View.GONE);
-		activityRecyclerView.setVisibility(View.VISIBLE);
 
 	}
 
@@ -200,6 +198,8 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 				NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
 			}
 
+			progressBar.setVisibility(View.GONE);
+			activityRecyclerView.setVisibility(View.VISIBLE);
 			activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
 			activityRecyclerView.setAdapter(activityAdapter);
 		}
