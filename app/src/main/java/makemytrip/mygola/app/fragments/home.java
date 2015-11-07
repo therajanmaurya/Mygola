@@ -19,12 +19,13 @@ import makemytrip.mygola.app.R;
 * */
 public class home extends Fragment {
 
-    private String TAG = "fragment_chat";
+    private String TAG = getClass().getSimpleName();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+/*
 		FButton fButton = (FButton)view.findViewById(R.id.openfav);
 		fButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -32,8 +33,9 @@ public class home extends Fragment {
 				Toast.makeText(getActivity(),"Fav" , Toast.LENGTH_SHORT).show();
 			}
 		});
+*/
 
-        Log.i(TAG, "fragment_chat: onCreateView");
+        Log.i(TAG, "onCreateView");
 
         return view;
     }

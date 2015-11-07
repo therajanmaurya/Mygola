@@ -6,7 +6,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                >
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/fbbutton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -54,28 +54,28 @@
         android:layout_alignParentEnd="true"/>
 
 
-    <!--<RelativeLayout-->
-        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_below="@+id/openfav">-->
+    &lt;!&ndash;<RelativeLayout&ndash;&gt;
+        &lt;!&ndash;xmlns:android="http://schemas.android.com/apk/res/android"&ndash;&gt;
+        &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;
+        &lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;
+        &lt;!&ndash;android:layout_below="@+id/openfav">&ndash;&gt;
 
 
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/recyclerView"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:visibility="gone" />-->
+            &lt;!&ndash;<android.support.v7.widget.RecyclerView&ndash;&gt;
+                &lt;!&ndash;android:id="@+id/recyclerView"&ndash;&gt;
+                &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;
+                &lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;
+                &lt;!&ndash;android:visibility="gone" />&ndash;&gt;
 
-        <!--<ProgressBar-->
-            <!--android:id="@+id/progress_circular"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:visibility="gone"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_centerVertical="true"/>-->
+        &lt;!&ndash;<ProgressBar&ndash;&gt;
+            &lt;!&ndash;android:id="@+id/progress_circular"&ndash;&gt;
+            &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+            &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+            &lt;!&ndash;android:visibility="gone"&ndash;&gt;
+            &lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;
+            &lt;!&ndash;android:layout_centerVertical="true"/>&ndash;&gt;
 
-    <!--</RelativeLayout>-->
+    &lt;!&ndash;</RelativeLayout>&ndash;&gt;
 
     <info.hoang8f.widget.FButton
         android:id="@+id/sortby"
@@ -113,6 +113,7 @@
                      android:layout_height="wrap_content"
                      android:text="Discount"
                      android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
+    </RadioGroup>-->
+
 
 </RelativeLayout>

@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 import makemytrip.mygola.app.R;
 import makemytrip.mygola.app.fragments.home;
 import makemytrip.mygola.app.tabbarview.TabBarView;
@@ -28,7 +30,8 @@ import makemytrip.mygola.app.util.CustomViewPager;
 * Customized ViewPager
 * CardStack
 */
-public class MainScreenActivity extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity implements MaterialSearchView.OnQueryTextListener
+{
 
     //this context using in
     public static Context context;
@@ -42,6 +45,8 @@ public class MainScreenActivity extends AppCompatActivity {
     private MainScreenPagerAdapter mMainScreenPagerAdapter;
     //Data
     private int PAGE_COUNT = 3;
+
+	MaterialSearchView searchView;
 
 
     @Override
@@ -77,6 +82,9 @@ public class MainScreenActivity extends AppCompatActivity {
         //Setting the pagerListener
         setPagerListener();
 
+	    searchView = (MaterialSearchView)findViewById(R.id.search_view);
+
+	    searchView.setOnQueryTextListener(this);
     }
 
     //using to set custom design , actions and tabView into toolbar
@@ -122,6 +130,10 @@ public class MainScreenActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+	    MenuItem item = menu.findItem(R.id.action_search);
+		searchView.setMenuItem(item);
+
         return true;
     }
 
@@ -161,8 +173,20 @@ public class MainScreenActivity extends AppCompatActivity {
         });
     }
 
+	@Override
+	public boolean onQueryTextSubmit(String s)
+	{
+		return false;
+	}
 
-    // class is implemented with IconTabProvider Interface as well as extends with FragmentStateAdapter for ViewPager
+	@Override
+	public boolean onQueryTextChange(String s)
+	{
+		return false;
+	}
+
+
+	// class is implemented with IconTabProvider Interface as well as extends with FragmentStateAdapter for ViewPager
     //with different tabIcons
     public class MainScreenPagerAdapter extends FragmentStatePagerAdapter implements TabBarView.IconTabProvider {
 
