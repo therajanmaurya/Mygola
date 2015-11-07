@@ -4,8 +4,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:fbutton="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-               >
+                android:layout_height="match_parent" >
     <!--<LinearLayout
         android:id="@+id/fbbutton"
         android:layout_width="match_parent"
@@ -117,27 +116,72 @@
 
 
 	<LinearLayout
+		android:id="@+id/selectorsLayout"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:orientation="horizontal">
+		android:layout_height="100dp"
+		android:orientation="horizontal"
+		android:gravity="top"
+		android:layout_gravity="top"
+		android:layout_alignParentStart="true">
 
-		<AppCompatSpinner
+		<Spinner
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:id="@+id/citySelectSpinner"
 			android:spinnerMode="dropdown"
 			android:entries="@array/cities"
+			style="@android:style/TextAppearance.Holo.Widget.TextView.SpinnerItem"
 			android:contentDescription="Filter by city:"/>
 
-		<AppCompatSpinner
+		<Spinner
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:spinnerMode="dropdown"
 			android:entries="@array/sort_options"
 			android:contentDescription="Sort by:"
+			style="@android:style/TextAppearance.Holo.Widget.TextView.SpinnerItem"
 			android:id="@+id/sortDelectSpinner"/>
 
 	</LinearLayout>
+
+
+
+		<view
+			android:id="@+id/activityListRecyclerView"
+			class="android.support.v7.widget.RecyclerView"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/selectorsLayout"
+			android:layout_alignParentStart="true"/>
+
+
+	<LinearLayout
+		android:id="@+id/bottomLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="100dp"
+		android:orientation="horizontal"
+		android:layout_gravity="bottom|end"
+		android:gravity="bottom"
+		android:layout_alignParentEnd="true"
+		android:layout_alignParentBottom="true">
+
+		<TextView
+			android:id="@+id/totalActivities"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="Total Activities: "
+			style="@android:style/TextAppearance.Holo.Medium"/>
+
+		<TextView
+			android:id="@+id/apiHits"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="API Hits: "
+			style="@android:style/TextAppearance.Holo.Medium"/>
+	</LinearLayout>
+
 </RelativeLayout>

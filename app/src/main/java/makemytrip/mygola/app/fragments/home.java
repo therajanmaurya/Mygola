@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,7 +32,8 @@ public class home extends Fragment {
 
 	private Context context = getActivity();
 
-	AppCompatSpinner citySelectSpinner, sortSelectSpinner;
+	private Spinner citySelectSpinner, sortSelectSpinner;
+	private RecyclerView activityRecyclerView;
 	private List<String> cities = Arrays.asList("Delhi", "Bangalore", "Mumbai");
 	private List<String> sort_options = Arrays.asList("Price", "Name", "Rating");
 
@@ -58,8 +61,8 @@ public class home extends Fragment {
 	{
 		super.onViewCreated(view, savedInstanceState);
 
-		citySelectSpinner = (AppCompatSpinner) view.findViewById(R.id.citySelectSpinner);
-		sortSelectSpinner = (AppCompatSpinner) view.findViewById(R.id.sortDelectSpinner);
+		citySelectSpinner = (Spinner) view.findViewById(R.id.citySelectSpinner);
+		sortSelectSpinner = (Spinner) view.findViewById(R.id.sortDelectSpinner);
 /*
 		citySelectSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.spinner_item,
 				cities));
