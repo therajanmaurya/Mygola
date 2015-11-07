@@ -114,7 +114,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 				ImageLoader.getInstance().displayImage(activityModelList.get(position).getImage(), viewHolder.image, options, animateFirstListener);
 			}catch (Exception e)
 			{
-				Log.i(LOG_TAG, "Exception Occured: " + e.getMessage());
+				Log.i(LOG_TAG, "Exception image Occured: " + activityModelList.get(position).getImage());
 			}
 
 

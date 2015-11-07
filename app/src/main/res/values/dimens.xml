@@ -7,5 +7,7 @@
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="spacing_normal">8dp</dimen>
+    <dimen name="cardMarginHorizontal">10dp</dimen>
+    <dimen name="cardMarginVertical">8dp</dimen>
 
 </resources>
