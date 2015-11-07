@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -154,7 +155,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 
 		activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
 		activityRecyclerView.setAdapter(activityAdapter);
-
+		activityRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 		progressBar.setVisibility(View.GONE);
 		activityRecyclerView.setVisibility(View.VISIBLE);
 	}
@@ -168,6 +169,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 			activitiyList.getActivities().clear();
 			for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
 			{
+				Log.d(TAG, "Activity retrieved from database: " + activity.getData().getName());
 				activitiyList.getActivities().add(activity.getData());
 			}
 		}
@@ -175,10 +177,9 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 		{
 			Log.e(TAG, e.getMessage());
 		}
-		finally
-		{
-			activityAdapter.notifyDataSetChanged();
-		}
+
+		Log.i(TAG, "Notifying adapter.");
+		activityAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -194,8 +195,8 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 			NoSQLEntity<ActivityModel> noSQLEntity = null;
 			for (ActivityModel activity : activitiyList.getActivities())
 			{
-
-				noSQLEntity = new NoSQLEntity<>(bucket, "" + ActivityId);
+				Log.d(TAG, "Saving Activity: Id " + ActivityId + ", Name: " + activity.getName());
+				noSQLEntity = new NoSQLEntity<>(bucket, "" + ActivityId++);
 				noSQLEntity.setData(activity);
 				NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
 			}

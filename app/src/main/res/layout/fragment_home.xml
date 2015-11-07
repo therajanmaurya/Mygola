@@ -148,9 +148,8 @@
 
 
 
-		<view
+		<android.support.v7.widget.RecyclerView
 			android:id="@+id/activityListRecyclerView"
-			class="android.support.v7.widget.RecyclerView"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/selectorsLayout"
