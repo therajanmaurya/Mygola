@@ -1,6 +1,7 @@
 package makemytrip.mygola.app.fragments;// Created by Sanat Dutta on 2/17/2015.
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import makemytrip.mygola.app.R;
+import makemytrip.mygola.app.activities.FullActivity;
 import makemytrip.mygola.app.adapters.ActivityAdapter;
+import makemytrip.mygola.app.adapters.RecyclerItemClickListner;
 import makemytrip.mygola.app.models.ActivitesListModel;
 import makemytrip.mygola.app.models.ActivityModel;
 import makemytrip.mygola.app.rest.MygolaService;
@@ -40,7 +43,7 @@ import retrofit.Retrofit;
 /*
 * this fragment is using for chat tab option
 * */
-public class home extends Fragment implements RetrievalCallback<ActivityModel>,
+public class home extends Fragment implements RecyclerItemClickListner.OnItemClickListener, RetrievalCallback<ActivityModel>,
 		Callback<ActivitesListModel>
 {
 
@@ -59,6 +62,19 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 	private ActivitesListModel activitiyList = new ActivitesListModel();
 	private List<String> cities;
 	private List<String> sort_options;
+
+	@Override
+	public void onItemClick(View childView, int position) {
+
+		Intent intent = new Intent(getActivity(), FullActivity.class);
+		intent.putExtra(FullActivity.EXTRA_POST, activitiyList.getActivities().get(position).getId());
+		startActivity(intent);
+	}
+
+	@Override
+	public void onItemLongPress(View childView, int position) {
+
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,6 +110,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		activityRecyclerView.setLayoutManager(layoutManager);
+		activityRecyclerView.addOnItemTouchListener(new RecyclerItemClickListner(getActivity(), this));
 		activityRecyclerView.setHasFixedSize(true);
 //		activityRecyclerView.setVisibility(View.GONE);
 
@@ -312,5 +329,6 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 		loadFromDatabase();
 
 	}
+
 
 }

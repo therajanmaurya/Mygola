@@ -33,7 +33,7 @@ import makemytrip.mygola.app.models.ActivityModel;
 public class FullActivity extends AppCompatActivity implements RetrievalCallback<ActivityModel>
 {
 	private final String LOG_TAG = getClass().getSimpleName();
-	public static final String EXTRA_POST = "POST_DETAILS";
+	public static final String EXTRA_POST = "ACTIVITY_ID";
 
 	private ActivityModel activity;
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
@@ -61,7 +61,7 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 				.build();
 
 		final Intent intent = getIntent();
-		activity.setId(Integer.parseInt(intent.getExtras().getString("ACTIVITY_ID")));
+		activity.setId(Integer.parseInt(intent.getStringExtra(EXTRA_POST)));
 
 		NoSQL
 				.with(this)
