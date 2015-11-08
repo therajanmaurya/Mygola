@@ -34,4 +34,5 @@
 		<item>Rating</item>
 	</string-array>
 	<string name="title_activity_full">FullActivity</string>
+	<string name="favourite">Favourite</string>
 </resources>

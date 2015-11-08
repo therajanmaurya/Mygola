@@ -2,6 +2,7 @@ package makemytrip.mygola.app.activities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +53,7 @@ public class MainScreenActivity extends AppCompatActivity
     private TabBarView mTabBarView;
     private MainScreenPagerAdapter mMainScreenPagerAdapter;
     //Data
-    private int PAGE_COUNT = 3;
+    private int PAGE_COUNT = 2;
 
     private MaterialSearchView searchView;
 
@@ -239,6 +240,14 @@ public class MainScreenActivity extends AppCompatActivity
             return true;
         }
 
+        if(id == R.id.favourite)
+        {
+            Intent searchIntent = new Intent(getApplicationContext() ,  FavouriteActivity.class);
+            startActivity(searchIntent);
+            return true;
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -344,7 +353,6 @@ public class MainScreenActivity extends AppCompatActivity
         private int[] tab_icons = {
                 R.drawable.ic_connect,
                 R.drawable.ic_list,
-                R.drawable.ic_chat
         };
 
         public MainScreenPagerAdapter(FragmentManager fm) {
@@ -359,8 +367,6 @@ public class MainScreenActivity extends AppCompatActivity
                 case 0:
                     return new home();
                 case 1:
-                    return new Discover();
-                case 2:
                     return new Discover();
                 default:
                     return null;
@@ -384,11 +390,10 @@ public class MainScreenActivity extends AppCompatActivity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Connect";
+                    return "Home";
                 case 1:
-                    return "Discover";
-                case 2:
-                    return "Chat";
+                    return "favourite";
+
             }
             return null;
         }

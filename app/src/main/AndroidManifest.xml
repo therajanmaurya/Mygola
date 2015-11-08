@@ -28,6 +28,11 @@
             android:name=".activities.FullActivity"
             android:label="@string/title_activity_full" >
         </activity>
+        <activity
+            android:name=".activities.FavouriteActivity"
+            android:label="@string/favourite" >
+        </activity>
+
     </application>
 
 </manifest>
