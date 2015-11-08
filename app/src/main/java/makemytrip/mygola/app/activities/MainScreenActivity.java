@@ -38,7 +38,7 @@ import makemytrip.mygola.app.util.CustomViewPager;
 * Customized ViewPager
 * CardStack
 */
-public class MainScreenActivity extends AppCompatActivity implements MaterialSearchView.OnQueryTextListener
+public class MainScreenActivity extends AppCompatActivity
 {
 
     //this context using in
@@ -54,7 +54,7 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
     //Data
     private int PAGE_COUNT = 3;
 
-	MaterialSearchView searchView;
+    private MaterialSearchView searchView;
 
 
     @Override
@@ -90,9 +90,82 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
         //Setting the pagerListener
         setPagerListener();
 
-	    searchView = (MaterialSearchView)findViewById(R.id.search_view);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView.setVoiceSearch(false);
+        searchView.setCursorDrawable(R.drawable.color_cursor_white);
+       // searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
 
-	    searchView.setOnQueryTextListener(this);
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(final String s) {
+				Log.d(TAG, "onQueryTextChanged, " + s);
+				NoSQL.with(context)
+						.using(ActivityModel.class)
+						.bucketId("mygola")
+						.filter(new DataFilter<ActivityModel>() {
+							@Override
+							public boolean isIncluded(NoSQLEntity<ActivityModel> item) {
+								Log.d(TAG, "isIncluded");
+								if (item != null && item.getData() != null) {
+									try {
+										Log.d(TAG, "Split-string[0]: " + s.split("=")[0]);
+										Log.d(TAG, "Split-string[1]: " + s.split("=")[1]);
+										switch (s.split("=")[0].toLowerCase()) {
+											case "name":
+												Log.d(TAG, "Compare name: " + item.getData().getName());
+												return item.getData().getName().contains(s.split("=")
+														[1]);
+
+											case "price":
+												return item.getData().getActual_price() < Integer.parseInt(s
+														.split("=<")[1]);
+
+											case "rating":
+												return item.getData().getRating() > Double.parseDouble(s
+														.split("=>")[1]);
+										}
+									} catch (ArrayIndexOutOfBoundsException ex) {
+										Log.e(TAG, ex.getMessage());
+										return false;
+									}
+								}
+								return false;
+							}
+						})
+						.retrieve(new RetrievalCallback<ActivityModel>() {
+							@Override
+							public void retrievedResults(List<NoSQLEntity<ActivityModel>> noSQLEntities) {
+								Log.d(TAG, "retrievedResults: ");
+								String[] results = new String[noSQLEntities.size()];
+								int i = 0;
+								for (NoSQLEntity<ActivityModel> activity : noSQLEntities) {
+									results[i] = activity.getData().getName();
+									Log.d(TAG, "Result: " + results[i]);
+									i++;
+								}
+								searchView.setSuggestions(results);
+							}
+						});
+				return true;
+			}
+		});
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+			@Override
+			public void onSearchViewShown() {
+				//Do some magic
+			}
+
+			@Override
+			public void onSearchViewClosed() {
+				//Do some magic
+			}
+		});
     }
 
     //using to set custom design , actions and tabView into toolbar
@@ -139,10 +212,19 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-	    MenuItem item = menu.findItem(R.id.action_search);
-		searchView.setMenuItem(item);
-
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
         return true;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -181,76 +263,76 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
         });
     }
 
-	@Override
-	public boolean onQueryTextSubmit(final String s)
-	{
-
-		return false;
-	}
-
-	@Override
-	public boolean onQueryTextChange(final String s)
-	{
-		Log.d(TAG, "onQueryTextChanged, " + s);
-		NoSQL.with(this)
-				.using(ActivityModel.class)
-				.bucketId("mygola")
-				.filter(new DataFilter<ActivityModel>()
-				{
-					@Override
-					public boolean isIncluded(NoSQLEntity<ActivityModel> item)
-					{
-						Log.d(TAG, "isIncluded");
-						if (item != null && item.getData() != null)
-						{
-							try
-							{
-								Log.d(TAG, "Split-string[0]: " + s.split("=")[0]);
-								Log.d(TAG, "Split-string[1]: " + s.split("=")[1]);
-								switch (s.split("=")[0].toLowerCase())
-								{
-									case "name":
-										Log.d(TAG, "Compare name: " + item.getData().getName());
-										return item.getData().getName().contains(s.split("=")
-												[1]);
-
-									case "price":
-										return item.getData().getActual_price() < Integer.parseInt(s
-												.split("=<")[1]);
-
-									case "rating":
-										return item.getData().getRating() > Double.parseDouble(s
-												.split("=>")[1]);
-								}
-							}
-							catch (ArrayIndexOutOfBoundsException ex)
-							{
-								Log.e(TAG, ex.getMessage());
-								return false;
-							}
-						}
-						return false;
-					}
-				})
-				.retrieve(new RetrievalCallback<ActivityModel>()
-				{
-					@Override
-					public void retrievedResults(List<NoSQLEntity<ActivityModel>> noSQLEntities)
-					{
-						Log.d(TAG, "retrievedResults: ");
-						String[] results = new String[noSQLEntities.size()];
-						int i = 0;
-						for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
-						{
-							results[i] = activity.getData().getName();
-							Log.d(TAG, "Result: " + results[i]);
-							i++;
-						}
-						searchView.setSuggestions(results);
-					}
-				});
-		return true;
-	}
+//	@Override
+//	public boolean onQueryTextSubmit(final String s)
+//	{
+//
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean onQueryTextChange(final String s)
+//	{
+//		Log.d(TAG, "onQueryTextChanged, " + s);
+//		NoSQL.with(this)
+//				.using(ActivityModel.class)
+//				.bucketId("mygola")
+//				.filter(new DataFilter<ActivityModel>()
+//				{
+//					@Override
+//					public boolean isIncluded(NoSQLEntity<ActivityModel> item)
+//					{
+//						Log.d(TAG, "isIncluded");
+//						if (item != null && item.getData() != null)
+//						{
+//							try
+//							{
+//								Log.d(TAG, "Split-string[0]: " + s.split("=")[0]);
+//								Log.d(TAG, "Split-string[1]: " + s.split("=")[1]);
+//								switch (s.split("=")[0].toLowerCase())
+//								{
+//									case "name":
+//										Log.d(TAG, "Compare name: " + item.getData().getName());
+//										return item.getData().getName().contains(s.split("=")
+//												[1]);
+//
+//									case "price":
+//										return item.getData().getActual_price() < Integer.parseInt(s
+//												.split("=<")[1]);
+//
+//									case "rating":
+//										return item.getData().getRating() > Double.parseDouble(s
+//												.split("=>")[1]);
+//								}
+//							}
+//							catch (ArrayIndexOutOfBoundsException ex)
+//							{
+//								Log.e(TAG, ex.getMessage());
+//								return false;
+//							}
+//						}
+//						return false;
+//					}
+//				})
+//				.retrieve(new RetrievalCallback<ActivityModel>()
+//				{
+//					@Override
+//					public void retrievedResults(List<NoSQLEntity<ActivityModel>> noSQLEntities)
+//					{
+//						Log.d(TAG, "retrievedResults: ");
+//						String[] results = new String[noSQLEntities.size()];
+//						int i = 0;
+//						for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
+//						{
+//							results[i] = activity.getData().getName();
+//							Log.d(TAG, "Result: " + results[i]);
+//							i++;
+//						}
+//						searchView.setSuggestions(results);
+//					}
+//				});
+//		return true;
+//	}
 
 
 	// class is implemented with IconTabProvider Interface as well as extends with FragmentStateAdapter for ViewPager
@@ -312,12 +394,4 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
         }
     }
 
-	@Override
-	public void onBackPressed() {
-		if (searchView.isSearchOpen()) {
-			searchView.closeSearch();
-		} else {
-			super.onBackPressed();
-		}
-	}
 }
