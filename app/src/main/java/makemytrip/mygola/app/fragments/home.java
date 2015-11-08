@@ -67,7 +67,8 @@ public class home extends Fragment implements RecyclerItemClickListner.OnItemCli
 	public void onItemClick(View childView, int position) {
 
 		Intent intent = new Intent(getActivity(), FullActivity.class);
-		intent.putExtra(FullActivity.EXTRA_POST, activitiyList.getActivities().get(position).getId());
+		intent.putExtra(FullActivity.EXTRA_POST, activitiyList.getActivities().get(position)
+				.getId());
 		startActivity(intent);
 	}
 
@@ -268,7 +269,8 @@ public class home extends Fragment implements RecyclerItemClickListner.OnItemCli
 			activitiyList.getActivities().clear();
 			for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
 			{
-				Log.d(TAG, "Activity retrieved from database: " + activity.getData().getName());
+				Log.d(TAG, "Activity retrieved from database: " + activity.getData().getName() +
+						" ID: " + activity.getId());
 				activity.getData().setId(Integer.parseInt(activity.getId()));
 				activitiyList.getActivities().add(activity.getData());
 			}

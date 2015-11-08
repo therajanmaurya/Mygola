@@ -66,6 +66,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 			image = (ImageView) v.findViewById(R.id.image);
 			name  = (TextView) v.findViewById(R.id.name);
 			actual_price  = (TextView) v.findViewById(R.id.actual_price);
+
 //			favoriteToggle = (Switch) v.findViewById(R.id.favoriteToggle);
 
 		}

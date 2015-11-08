@@ -60,8 +60,9 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.build();
 
+		activity = new ActivityModel();
 		final Intent intent = getIntent();
-		activity.setId(Integer.parseInt(intent.getStringExtra(EXTRA_POST)));
+		activity.setId(intent.getExtras().getInt(EXTRA_POST));
 
 		NoSQL
 				.with(this)
@@ -81,7 +82,7 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 		/**
 		 * Setting up the Support ToolBar and  CollapsingToolbarLayout
 		 */
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = (Toolbar) findViewById(R.id.titleToolbar);
 		toolbar.setTitle("");
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -128,6 +129,7 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 		{
 			activity = noSQLEntities.get(0).getData();
 			toolbar.setTitle(activity.getName());
+			collapsingToolbar.setTitle(activity.getName());
 			ratingTextView.setText(activity.getRating() + "");
 			pricingTextView.setText("₹" + activity.getActual_price() + "@" + "10" + "%");
 			descriptionTextView.setText(activity.getDescription());
