@@ -26,7 +26,7 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import java.util.List;
 
 import makemytrip.mygola.app.R;
-import makemytrip.mygola.app.fragments.Discover;
+import makemytrip.mygola.app.fragments.favourite;
 import makemytrip.mygola.app.fragments.home;
 import makemytrip.mygola.app.models.ActivityModel;
 import makemytrip.mygola.app.tabbarview.TabBarView;
@@ -367,7 +367,9 @@ public class MainScreenActivity extends AppCompatActivity
                 case 0:
                     return new home();
                 case 1:
-                    return new Discover();
+                    return new favourite();
+                case 2:
+                    return new favourite();
                 default:
                     return null;
             }
@@ -392,8 +394,9 @@ public class MainScreenActivity extends AppCompatActivity
                 case 0:
                     return "Home";
                 case 1:
-                    return "favourite";
-
+                    return "Favourite";
+                case 2:
+                    return "Chat";
             }
             return null;
         }

@@ -32,7 +32,7 @@ import java.util.List;
 import makemytrip.mygola.app.R;
 import makemytrip.mygola.app.models.ActivityModel;
 
-public class FullActivity extends AppCompatActivity implements RetrievalCallback<ActivityModel>
+public class FullActivity extends AppCompatActivity implements RetrievalCallback<ActivityModel>, View.OnClickListener
 {
 	private final String LOG_TAG = getClass().getSimpleName();
 	public static final String EXTRA_POST = "ACTIVITY_ID";
@@ -174,20 +174,50 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 		if (noSQLEntities != null)
 		{
 			activity = noSQLEntities.get(0).getData();
+			activity.setId(Integer.parseInt(noSQLEntities.get(0).getId()));
 			toolbar.setTitle(activity.getName());
 			collapsingToolbar.setTitle(activity.getName());
 
 			ImageLoader.getInstance().displayImage(activity.getImage(),
 					image, displayImageOptions, animateFirstListener);
 
-			distv.setText("Discount: " + activity.getDiscount() );
+			distv.setText("Discount: " + activity.getDiscount());
 			loctv.setText("Location: " + activity.getLocation());
 			citytv.setText("City: " + activity.getCity());
 			pritv.setText("Effective Price: " + "₹" + activity.getActual_price());
 			destv.setText(activity.getDescription());
 			ratingBar.setNumStars(5);
 			ratingBar.setRating(activity.getRating());
+			favouritefav.setOnClickListener(this);
 
+		}
+	}
+
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.favourite:
+				activity.setFavorite(!activity.isFavorite());
+				if (activity.isFavorite())
+				{
+					NoSQLEntity<ActivityModel> noSQLEntity = new NoSQLEntity<ActivityModel>
+							("favorites", ""+activity.getId());
+					noSQLEntity.setData(activity);
+					NoSQL.with(this)
+							.using(ActivityModel.class)
+							.save(noSQLEntity);
+				}
+				else
+				{
+					NoSQL.with(this)
+							.using(ActivityModel.class)
+							.bucketId("favorites")
+							.entityId(""+activity.getId())
+							.delete();
+				}
+				break;
 		}
 	}
 
