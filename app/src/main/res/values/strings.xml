@@ -33,4 +33,5 @@
 		<item>Name</item>
 		<item>Rating</item>
 	</string-array>
+	<string name="title_activity_full">FullActivity</string>
 </resources>
