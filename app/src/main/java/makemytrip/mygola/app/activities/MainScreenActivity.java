@@ -16,11 +16,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.colintmiller.simplenosql.DataFilter;
+import com.colintmiller.simplenosql.NoSQL;
+import com.colintmiller.simplenosql.NoSQLEntity;
+import com.colintmiller.simplenosql.RetrievalCallback;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import java.util.List;
 
 import makemytrip.mygola.app.R;
 import makemytrip.mygola.app.fragments.Discover;
 import makemytrip.mygola.app.fragments.home;
+import makemytrip.mygola.app.models.ActivityModel;
 import makemytrip.mygola.app.tabbarview.TabBarView;
 import makemytrip.mygola.app.util.CustomViewPager;
 
@@ -175,15 +182,74 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
     }
 
 	@Override
-	public boolean onQueryTextSubmit(String s)
+	public boolean onQueryTextSubmit(final String s)
 	{
+
 		return false;
 	}
 
 	@Override
-	public boolean onQueryTextChange(String s)
+	public boolean onQueryTextChange(final String s)
 	{
-		return false;
+		Log.d(TAG, "onQueryTextChanged, " + s);
+		NoSQL.with(this)
+				.using(ActivityModel.class)
+				.bucketId("mygola")
+				.filter(new DataFilter<ActivityModel>()
+				{
+					@Override
+					public boolean isIncluded(NoSQLEntity<ActivityModel> item)
+					{
+						Log.d(TAG, "isIncluded");
+						if (item != null && item.getData() != null)
+						{
+							try
+							{
+								Log.d(TAG, "Split-string[0]: " + s.split("=")[0]);
+								Log.d(TAG, "Split-string[1]: " + s.split("=")[1]);
+								switch (s.split("=")[0].toLowerCase())
+								{
+									case "name":
+										Log.d(TAG, "Compare name: " + item.getData().getName());
+										return item.getData().getName().contains(s.split("=")
+												[1]);
+
+									case "price":
+										return item.getData().getActual_price() < Integer.parseInt(s
+												.split("=<")[1]);
+
+									case "rating":
+										return item.getData().getRating() > Double.parseDouble(s
+												.split("=>")[1]);
+								}
+							}
+							catch (ArrayIndexOutOfBoundsException ex)
+							{
+								Log.e(TAG, ex.getMessage());
+								return false;
+							}
+						}
+						return false;
+					}
+				})
+				.retrieve(new RetrievalCallback<ActivityModel>()
+				{
+					@Override
+					public void retrievedResults(List<NoSQLEntity<ActivityModel>> noSQLEntities)
+					{
+						Log.d(TAG, "retrievedResults: ");
+						String[] results = new String[noSQLEntities.size()];
+						int i = 0;
+						for (NoSQLEntity<ActivityModel> activity : noSQLEntities)
+						{
+							results[i] = activity.getData().getName();
+							Log.d(TAG, "Result: " + results[i]);
+							i++;
+						}
+						searchView.setSuggestions(results);
+					}
+				});
+		return true;
 	}
 
 
@@ -245,4 +311,13 @@ public class MainScreenActivity extends AppCompatActivity implements MaterialSea
             return null;
         }
     }
+
+	@Override
+	public void onBackPressed() {
+		if (searchView.isSearchOpen()) {
+			searchView.closeSearch();
+		} else {
+			super.onBackPressed();
+		}
+	}
 }

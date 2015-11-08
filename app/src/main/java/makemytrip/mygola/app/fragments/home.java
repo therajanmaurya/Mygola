@@ -261,6 +261,15 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 			Log.e(TAG, e.getMessage());
 		}
 
+		progressBar.setVisibility(View.GONE);
+		activityRecyclerView.setVisibility(View.VISIBLE);
+
+		if (activityAdapter==null)
+		{
+			activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
+			activityRecyclerView.setAdapter(activityAdapter);
+		}
+
 		Log.i(TAG, "Notifying adapter.");
 		activityAdapter.notifyDataSetChanged();
 	}
@@ -284,10 +293,7 @@ public class home extends Fragment implements RetrievalCallback<ActivityModel>,
 				NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
 			}
 
-			progressBar.setVisibility(View.GONE);
-			activityRecyclerView.setVisibility(View.VISIBLE);
-			activityAdapter = new ActivityAdapter(context, activitiyList.getActivities());
-			activityRecyclerView.setAdapter(activityAdapter);
+
 		}
 		else
 		{
