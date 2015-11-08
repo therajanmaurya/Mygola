@@ -50,7 +50,6 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
 
     private String bucket="activities";
     private int entityId;
-    private Spinner citySelectSpinner, sortSelectSpinner;
     private RecyclerView activityRecyclerView;
     private Retrofit retrofit;
     private int pageNumber = 0;
@@ -78,7 +77,7 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         context = getActivity();
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
 
 /*
@@ -120,38 +119,7 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
 
         cities = Arrays.asList(context.getResources().getStringArray(R.array.cities));
         sort_options = Arrays.asList(context.getResources().getStringArray(R.array.sort_options));
-        citySelectSpinner = (Spinner) view.findViewById(R.id.citySelectSpinner);
-        sortSelectSpinner = (Spinner) view.findViewById(R.id.sortDelectSpinner);
 
-        citySelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                loadActivities();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                loadActivities();
-            }
-        });
-
-        sortSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                loadActivities();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
-        });
 
         loadActivities();
 
