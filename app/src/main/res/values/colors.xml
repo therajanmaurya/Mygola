@@ -39,4 +39,7 @@
     <color name="theme_accent_1">#00b0ff</color>
     <color name="card">#fff</color>
 
+    <color name="theme_primary_text_inverted">#ffffff</color>
+    <color name="theme_secondary_text_inverted">#8affffff</color>
+
 </resources>
