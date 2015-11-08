@@ -2,15 +2,16 @@ package makemytrip.mygola.app.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.colintmiller.simplenosql.DataFilter;
@@ -43,6 +44,9 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 	CollapsingToolbarLayout collapsingToolbar;
 	TextView ratingTextView, pricingTextView, descriptionTextView;
 	ImageView image;
+
+	TextView distv ,loctv,citytv,pritv,rattv , destv;
+	RatingBar ratingBar ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -91,10 +95,15 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 				(CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 		collapsingToolbar.setTitle("Mygola");
 
-		ratingTextView = (TextView)findViewById(R.id.ratingTextView);
-		pricingTextView = (TextView)findViewById(R.id.pricing);
-		descriptionTextView = (TextView) findViewById(R.id.description);
+
 		image = (ImageView) findViewById(R.id.fullImage);
+		distv = (TextView)findViewById(R.id.discount_text);
+		loctv = (TextView)findViewById(R.id.location_text);
+		citytv = (TextView)findViewById(R.id.city_text);
+		pritv = (TextView)findViewById(R.id.price_text);
+		destv = (TextView)findViewById(R.id.description_text);
+		ratingBar = (RatingBar)findViewById(R.id.ratingBar);
+
 	}
 
 	@Override
@@ -119,6 +128,11 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 			return true;
 		}
 
+		if (id == android.R.id.home) {
+			finish();
+			return true;
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -130,11 +144,17 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 			activity = noSQLEntities.get(0).getData();
 			toolbar.setTitle(activity.getName());
 			collapsingToolbar.setTitle(activity.getName());
-			ratingTextView.setText(activity.getRating() + "");
-			pricingTextView.setText("₹" + activity.getActual_price() + "@" + "10" + "%");
-			descriptionTextView.setText(activity.getDescription());
+
 			ImageLoader.getInstance().displayImage(activity.getImage(),
 					image, displayImageOptions, animateFirstListener);
+			distv.setText("Discount: " + activity.getDiscount() );
+			loctv.setText("Location: " + activity.getLocation());
+			citytv.setText("City: " + activity.getCity());
+			pritv.setText("Effective Price: " + "₹" + activity.getActual_price());
+			destv.setText(activity.getDescription());
+			ratingBar.setNumStars(5);
+			ratingBar.setRating(activity.getRating());
+
 		}
 	}
 
