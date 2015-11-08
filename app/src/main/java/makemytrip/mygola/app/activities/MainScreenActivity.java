@@ -2,6 +2,7 @@ package makemytrip.mygola.app.activities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +26,6 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import java.util.List;
 
 import makemytrip.mygola.app.R;
-import makemytrip.mygola.app.fragments.favourite;
 import makemytrip.mygola.app.fragments.home;
 import makemytrip.mygola.app.models.ActivityModel;
 import makemytrip.mygola.app.tabbarview.TabBarView;
@@ -52,7 +52,7 @@ public class MainScreenActivity extends AppCompatActivity
     private TabBarView mTabBarView;
     private MainScreenPagerAdapter mMainScreenPagerAdapter;
     //Data
-    private int PAGE_COUNT = 3;
+    private int PAGE_COUNT = 1;
 
     private MaterialSearchView searchView;
 
@@ -239,6 +239,12 @@ public class MainScreenActivity extends AppCompatActivity
             return true;
         }
 
+		if(id == R.id.favourite)
+		{
+			Intent intent = new Intent(this , FavouriteActiviyt.class);
+			startActivity(intent);
+		}
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -343,8 +349,6 @@ public class MainScreenActivity extends AppCompatActivity
         //Defining the array for Tab icons..which is going to call dynamically and load it into tabBar of toolbar
         private int[] tab_icons = {
                 R.drawable.ic_connect,
-                R.drawable.ic_list,
-                R.drawable.ic_chat
         };
 
         public MainScreenPagerAdapter(FragmentManager fm) {
@@ -358,10 +362,6 @@ public class MainScreenActivity extends AppCompatActivity
             switch (pos) {
                 case 0:
                     return new home();
-                case 1:
-                    return new favourite();
-                case 2:
-                    return new favourite();
                 default:
                     return null;
             }
@@ -385,10 +385,6 @@ public class MainScreenActivity extends AppCompatActivity
             switch (position) {
                 case 0:
                     return "Home";
-                case 1:
-                    return "Favourite";
-                case 2:
-                    return "Chat";
             }
             return null;
         }
