@@ -2,15 +2,14 @@ package makemytrip.mygola.app.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -32,7 +31,7 @@ import java.util.List;
 import makemytrip.mygola.app.R;
 import makemytrip.mygola.app.models.ActivityModel;
 
-public class FullActivity extends AppCompatActivity implements RetrievalCallback<ActivityModel>, CompoundButton.OnCheckedChangeListener
+public class FullActivity extends AppCompatActivity implements RetrievalCallback<ActivityModel>
 {
 	private final String LOG_TAG = getClass().getSimpleName();
 	public static final String EXTRA_POST = "ACTIVITY_ID";
@@ -98,9 +97,7 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 		pricingTextView = (TextView)findViewById(R.id.pricing);
 		descriptionTextView = (TextView) findViewById(R.id.description);
 		image = (ImageView) findViewById(R.id.fullImage);
-		favoriteToggle = (Switch) findViewById(R.id.favoriteFloatingButton);
 
-		favoriteToggle.setOnCheckedChangeListener(this);
 	}
 
 	@Override
@@ -141,30 +138,10 @@ public class FullActivity extends AppCompatActivity implements RetrievalCallback
 			descriptionTextView.setText(activity.getDescription());
 			ImageLoader.getInstance().displayImage(activity.getImage(),
 					image, displayImageOptions, animateFirstListener);
-			favoriteToggle.setChecked(activity.isFavorite());
-			favoriteToggle.setBackgroundResource(activity.isFavorite()? android.R.drawable
-					.star_big_on : android.R.drawable.star_big_off);
+
 		}
 	}
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-	{
-		activity.setFavorite(isChecked);
-		if (!isChecked)
-		{
-			NoSQL.with(this)
-					.using(ActivityModel.class)
-					.bucketId("favorites")
-					.entityId("" + activity.getId())
-					.delete();
-		}
-		else
-		NoSQL
-				.with(this)
-				.using(ActivityModel.class)
-				.save(new NoSQLEntity<ActivityModel>("favorites", "" + activity.getId(), activity));
-	}
 
 	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener
 	{
