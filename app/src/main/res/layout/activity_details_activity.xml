@@ -93,6 +93,14 @@
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
 
+				<Switch
+					android:id="@+id/favoriteFloatingButton"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:layout_margin="16dp"
+					android:clickable="true"
+					android:layout_gravity="right"/>
+
 			</LinearLayout>
 
 		</android.support.v4.widget.NestedScrollView>
@@ -106,17 +114,6 @@
 			android:src="@android:drawable/ic_dialog_map"
 			android:layout_margin="16dp"
 			android:clickable="true"/>
-
-		<android.support.design.widget.FloatingActionButton
-			android:id="@+id/favoriteFloatingButton"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			app:layout_anchor="@id/mapFloatingButton"
-			app:layout_anchorGravity="center|left|start"
-			android:src="@android:drawable/ic_dialog_map"
-			android:layout_margin="16dp"
-			android:clickable="true"
-			/>
 
 	</android.support.design.widget.CoordinatorLayout>
 

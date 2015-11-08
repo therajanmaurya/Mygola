@@ -51,7 +51,7 @@ public class home extends Fragment implements RecyclerItemClickListner.OnItemCli
 
 	private Context context;
 
-	private String bucket="mygola";
+	private String bucket="activities";
 	private int entityId;
 	private Spinner citySelectSpinner, sortSelectSpinner;
 	private RecyclerView activityRecyclerView;
