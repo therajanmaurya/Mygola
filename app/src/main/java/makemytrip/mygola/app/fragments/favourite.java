@@ -40,15 +40,14 @@ import retrofit.Retrofit;
 /**
  * Created by Aradh Pillai on 1/10/15.
  */
-public class favourite extends Fragment implements RecyclerItemClickListner.OnItemClickListener, RetrievalCallback<ActivityModel>,
-        Callback<ActivitesListModel>
+public class favourite extends Fragment implements RecyclerItemClickListner.OnItemClickListener, RetrievalCallback<ActivityModel>
 {
 
     private String TAG = getClass().getSimpleName();
 
     private Context context;
 
-    private String bucket="activities";
+    private String bucket="favorites";
     private int entityId;
     private RecyclerView activityRecyclerView;
     private Retrofit retrofit;
@@ -112,18 +111,13 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
 //		activityRecyclerView.setVisibility(View.GONE);
 
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(ApiUtils.getApiBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
         cities = Arrays.asList(context.getResources().getStringArray(R.array.cities));
         sort_options = Arrays.asList(context.getResources().getStringArray(R.array.sort_options));
 
 
-        loadActivities();
+        loadFromDatabase();
 
-        setUpAdapter();
+
 /*
 		citySelectSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.spinner_item,
 				cities));
@@ -131,15 +125,6 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
 				sort_options));*/
     }
 
-    private void loadActivities()
-    {
-        MygolaService mygolaService = retrofit.create(MygolaService.class);
-
-        Call<ActivitesListModel> activitiesCall = mygolaService.getActivitiesList("list_activity");
-//		Call<APIHitsModel> apiHitsModelCall = mygolaService.getApiHits("api_hits");
-
-        activitiesCall.enqueue(this);
-    }
 
     private void setUpAdapter()
     {
@@ -156,73 +141,6 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
     {
         NoSQL.with(context).using(ActivityModel.class)
                 .bucketId(bucket)
-                .filter(new DataFilter<ActivityModel>()
-                {
-                    @Override
-                    public boolean isIncluded(NoSQLEntity<ActivityModel> item)
-                    {
-                        Log.d(TAG, "isIncluded");
-                        if (item != null && item.getData() != null && citySelectSpinner
-                                .getSelectedItemPosition()!=0)
-                        {
-                            return item.getData().getCity().equals(cities.get(citySelectSpinner
-                                    .getSelectedItemPosition()));
-                        }
-                        return true;
-                    }
-                })
-                .orderBy(new DataComparator<ActivityModel>()
-                {
-                    @Override
-                    public int compare(NoSQLEntity<ActivityModel> lhs, NoSQLEntity<ActivityModel> rhs)
-                    {
-                        Log.d(TAG, "compare(): ");
-                        if (lhs != null && lhs.getData() != null) {
-                            if (rhs != null && rhs.getData() != null) {
-                                switch (sortSelectSpinner.getSelectedItemPosition())
-                                {
-                                    case 0:
-                                        Log.d(TAG, "case 0, Price: " + lhs.getData()
-                                                .getActual_price() + " v/s " + rhs.getData()
-                                                .getActual_price());
-                                        return lhs
-                                                .getData()
-                                                .getActual_price() >
-                                                rhs
-                                                        .getData()
-                                                        .getActual_price() ? 1 : -1;
-
-                                    case 1:
-                                        Log.d(TAG, "case 1, Name: " + lhs.getData()
-                                                .getName() + " v/s " + rhs.getData()
-                                                .getName());
-                                        return lhs.getData().getName().compareToIgnoreCase(rhs.getData().getName
-                                                ());
-
-                                    case 2:
-                                        Log.d(TAG, "case 2, Rating: " + lhs.getData()
-                                                .getRating() + " v/s " + rhs.getData()
-                                                .getRating());
-                                        return lhs
-                                                .getData()
-                                                .getRating() >
-                                                rhs
-                                                        .getData()
-                                                        .getRating() ? 1 : -1;
-
-                                    default:
-                                        return -1;
-                                }
-                            } else {
-                                return 1;
-                            }
-                        } else if (rhs != null && rhs.getData() != null) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    }
-                })
                 .retrieve(this);
     }
     @Override
@@ -256,45 +174,6 @@ public class favourite extends Fragment implements RecyclerItemClickListner.OnIt
 
         Log.i(TAG, "Notifying adapter.");
         activityAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onResponse(Response<ActivitesListModel> response, Retrofit retrofit)
-    {
-        Log.d(TAG, "onResponse. URL: ");
-        if (response.isSuccess())
-        {
-            Log.d(TAG, "isSuccess");
-            activitiyList = response.body();
-
-            int ActivityId=0;
-            NoSQLEntity<ActivityModel> noSQLEntity = null;
-            for (ActivityModel activity : activitiyList.getActivities())
-            {
-                Log.d(TAG, "Saving Activity: Id " + ActivityId + ", Name: " + activity.getName());
-                noSQLEntity = new NoSQLEntity<>(bucket, "" + ActivityId++);
-                noSQLEntity.setData(activity);
-                NoSQL.with(context).using(ActivityModel.class).save(noSQLEntity);
-            }
-
-
-        }
-        else
-        {
-            Log.e(TAG, response.message());
-        }
-
-        loadFromDatabase();
-
-    }
-
-    @Override
-    public void onFailure(Throwable t)
-    {
-        Log.e(TAG, "onFailure: Activities list fetching failed: " + t.getMessage());
-
-        loadFromDatabase();
-
     }
 
 
