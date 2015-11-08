@@ -1,7 +1,5 @@
 package makemytrip.mygola.app.models;
 
-import android.util.Log;
-
 /**
  * Created by deves on 11/7/2015.
  */
@@ -22,13 +20,20 @@ public class ActivityModel {
 	private String name;
 	private String image;
 	private int actual_price;
-//	private int discount;
-	private double rating;
+	private String discount;
+	private float rating;
 	private String city;
 	private String location;
 	private String description;
 	private boolean favorite = false;
 
+	public float getRating() {
+		return rating;
+	}
+
+	public void setRating(float rating) {
+		this.rating = rating;
+	}
 	public boolean isFavorite()
 	{
 		return favorite;
@@ -39,6 +44,13 @@ public class ActivityModel {
 		this.favorite = favorite;
 	}
 
+	public String getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(String discount) {
+		this.discount = discount;
+	}
 	/**
 	 *
 	 * @return
@@ -114,23 +126,6 @@ public class ActivityModel {
 //		this.discount = Integer.parseInt(discount);
 //	}
 
-	/**
-	 *
-	 * @return
-	 * The rating
-	 */
-	public double getRating() {
-		return rating;
-	}
-
-	/**
-	 *
-	 * @param rating
-	 * The rating
-	 */
-	public void setRating(String rating) {
-		this.rating = Double.parseDouble(rating);
-	}
 
 	/**
 	 *
